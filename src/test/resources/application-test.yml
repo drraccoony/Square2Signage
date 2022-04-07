@@ -1,0 +1,11 @@
+square:
+  app-id: test-123456
+  app-secret: test-secret-123456
+  app-scopes: ITEMS_READ
+  state-id-ttl: 300000
+  environment: SANDBOX
+  api:
+    host: testing.sqauresoft.com
+frontend:
+  host: localhost:3000
+  http-scheme: http

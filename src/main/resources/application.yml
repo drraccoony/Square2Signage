@@ -1,0 +1,11 @@
+square:
+  app-id: ${SQUARE_APP_ID}
+  app-secret: ${SQUARE_APP_SECRET}
+  app-scopes: ${SQUARE_APP_SCOPES:ITEMS_READ}
+  environment: ${SQUARE_ENVIRONMENT:SANDBOX}
+  state-id-ttl: ${SQUARE_STATE_ID_TTL:300000}
+frontend:
+  host: ${FRONTEND_HOST:localhost:3000}
+  http-scheme: ${FRONTEND_HTTP_SCHEME:http}
+  failure-path: ${FRONTEND_FAILURE_PATH:/failure}
+  success-path: ${FRONTEND_SUCCESS_PATH:/success}

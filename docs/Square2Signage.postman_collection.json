@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "f3702434-3caa-4f73-8057-64818a4336d2",
+		"name": "Square2Signage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "OAuth",
+			"item": [
+				{
+					"name": "Start Square OAuth Flow",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/square/oauth/start",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"square",
+								"oauth",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check OAuth Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/square/oauth/status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"square",
+								"oauth",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke OAuth Access",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/square/oauth/revoke",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"square",
+								"oauth",
+								"revoke"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
