@@ -1,4 +1,4 @@
-package org.tyto.square.client.model;
+package org.tyto.square.client.model.square;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -24,17 +24,7 @@ public class SquareTokenData {
     @JsonProperty("refresh_token")
     private String refreshToken;
 
-    public static SquareTokenData buildFromOAuthResponse(SquareOAuthResponse tokenResponse) {
-        SquareTokenData tokenData = new SquareTokenData();
-        tokenData.setAccessToken(tokenResponse.getAccessToken());
-        tokenData.setTokenType(tokenResponse.getTokenType());
-        tokenData.setExpiresAt(tokenResponse.getExpiresAt());
-        tokenData.setMerchantId(tokenResponse.getMerchantId());
-        tokenData.setRefreshToken(tokenResponse.getRefreshToken());
-        return tokenData;
-    }
-
-    public void refreshTokenData(SquareOAuthResponse refreshTokenResponse) throws SquareTokenRequestException {
+    public void refreshTokenData(SquareTokenData refreshTokenResponse) throws SquareTokenRequestException {
         if (StringUtils.hasText(refreshTokenResponse.getAccessToken())) {
             this.setRefreshToken(refreshTokenResponse.getAccessToken());
             log.debug("Access token has been refreshed.");

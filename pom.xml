@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<spock.version>2.1-groovy-3.0</spock.version>
+		<mockWebServer.version>4.9.3</mockWebServer.version>
 	</properties>
 
 	<dependencies>
@@ -64,6 +65,18 @@
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
 			<version>${spock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${mockWebServer.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<version>${mockWebServer.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

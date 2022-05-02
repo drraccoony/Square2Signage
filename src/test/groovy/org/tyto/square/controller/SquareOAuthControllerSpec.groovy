@@ -9,7 +9,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
-import org.tyto.square.service.SquareService
+import org.tyto.square.service.SquareOAuthService
 import org.tyto.square.exception.SquareTokenRequestException
 import org.tyto.square.util.FrontendUtil
 import reactor.core.publisher.Mono
@@ -21,7 +21,7 @@ import spock.lang.Unroll
 class SquareOAuthControllerSpec extends Specification {
 
     @SpringBean
-    SquareService squareService = Mock()
+    SquareOAuthService squareService = Mock()
     @SpringBean
     FrontendUtil frontendUtil = Mock()
 
@@ -36,7 +36,7 @@ class SquareOAuthControllerSpec extends Specification {
         ResponseEntity response = template.exchange(URI.create("/square/oauth/start"), HttpMethod.GET, HttpEntity.EMPTY, String.class)
 
         then:
-        1 * squareService.startSquareOAuthFlow() >> redirectLocation
+        1 * squareService.startOAuthFlow() >> redirectLocation
         response.getStatusCode() == HttpStatus.OK
     }
 
@@ -51,7 +51,7 @@ class SquareOAuthControllerSpec extends Specification {
 
         then:
         1 * frontendUtil.getSuccessUri() >> "/test/success"
-        1 * squareService.finishSquareOAuthFlow(code, state) >> Mono.just(true)
+        1 * squareService.finishOAuthFlow(code, state) >> Mono.just(true)
         response.getStatusCode() == HttpStatus.OK
     }
 
@@ -66,7 +66,7 @@ class SquareOAuthControllerSpec extends Specification {
 
         then:
         1 * frontendUtil.getFailureUri() >> "/test/failure"
-        1 * squareService.finishSquareOAuthFlow(code, state) >> Mono.just(false)
+        1 * squareService.finishOAuthFlow(code, state) >> Mono.just(false)
         response.getStatusCode() == HttpStatus.BAD_REQUEST
     }
 
@@ -81,7 +81,7 @@ class SquareOAuthControllerSpec extends Specification {
 
         then:
         1 * frontendUtil.getFailureUri() >> "/test/failure"
-        1 * squareService.finishSquareOAuthFlow(code, state) >> Mono.error(new SquareTokenRequestException("Failed"))
+        1 * squareService.finishOAuthFlow(code, state) >> Mono.error(new SquareTokenRequestException("Failed"))
         response.getStatusCode() == HttpStatus.BAD_REQUEST
     }
 
@@ -103,7 +103,7 @@ class SquareOAuthControllerSpec extends Specification {
 
         then:
         1 * frontendUtil.getFailureUri() >> "/test/failure"
-        0 * squareService.finishSquareOAuthFlow(_, _)
+        0 * squareService.finishOAuthFlow(_, _)
         response.getStatusCode() == HttpStatus.BAD_REQUEST
 
         where:

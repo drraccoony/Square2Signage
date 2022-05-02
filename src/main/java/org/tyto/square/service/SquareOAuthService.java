@@ -14,7 +14,7 @@ import java.util.Random;
 
 @Slf4j
 @Service
-public class SquareService {
+public class SquareOAuthService {
 
     private final SquareConfiguration config;
     private final SquareRestClient client;
@@ -22,13 +22,13 @@ public class SquareService {
     private Long stateExpiration;
 
     @Autowired
-    public SquareService(SquareConfiguration config, SquareRestClient client) {
+    public SquareOAuthService(SquareConfiguration config, SquareRestClient client) {
         this.config = config;
         this.client = client;
         this.stateExpiration = System.currentTimeMillis();
     }
 
-    public String startSquareOAuthFlow() {
+    public String startOAuthFlow() {
         try {
             this.cachedStateId = SecureRandom.getInstanceStrong().nextLong();
         } catch (NoSuchAlgorithmException e) {
@@ -39,16 +39,16 @@ public class SquareService {
         return client.getOAuthRedirect(this.cachedStateId);
     }
 
-    public Mono<Boolean> finishSquareOAuthFlow(String code, Long stateId) {
-        if (stateId != null && !stateId.equals(cachedStateId)) {
+    public Mono<Boolean> finishOAuthFlow(String code, Long stateId) {
+        if (stateId == null || !stateId.equals(cachedStateId)) {
             log.error("State ids do not match -> cached: " + cachedStateId + " provided: " + stateId);
             return Mono.error(new SquareStateIdException("Provided state ID does not match current authorization session, please re-initiate Square authorization."));
-        } else if (System.currentTimeMillis() > stateExpiration) {
+        } else if (stateExpiration == null || System.currentTimeMillis() > stateExpiration) {
             log.error("Provided state ID has expired.");
             return Mono.error(new SquareStateIdException("Provided state ID has expired, please re-initiate Square authorization."));
         }
 
-        return client.getAuthorizationData(code);
+        return client.authorizeApi(code);
     }
 
     public boolean checkIfAuthorized() {

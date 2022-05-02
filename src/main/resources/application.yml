@@ -1,7 +1,7 @@
 square:
   app-id: ${SQUARE_APP_ID}
   app-secret: ${SQUARE_APP_SECRET}
-  app-scopes: ${SQUARE_APP_SCOPES:ITEMS_READ}
+  app-scopes: ${SQUARE_APP_SCOPES:ITEMS_READ,INVENTORY_READ}
   environment: ${SQUARE_ENVIRONMENT:SANDBOX}
   state-id-ttl: ${SQUARE_STATE_ID_TTL:300000}
 frontend:

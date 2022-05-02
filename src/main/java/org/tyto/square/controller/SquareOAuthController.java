@@ -9,23 +9,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import org.tyto.square.service.SquareService;
+import org.tyto.square.service.SquareOAuthService;
 import org.tyto.square.util.FrontendUtil;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:3000", "http://connect.squareupsandbox.com", "https://connect.squareupsandbox.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://connect.squareupsandbox.com", "https://connect.squareupsandbox.com"})
 @RestController
 @RequestMapping("/square/oauth")
 public class SquareOAuthController {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private final SquareService squareService;
+    private final SquareOAuthService squareOAuthService;
     private final FrontendUtil frontendUtil;
 
     @Autowired
-    public SquareOAuthController(SquareService squareService, FrontendUtil frontendUtil) {
-        this.squareService = squareService;
+    public SquareOAuthController(SquareOAuthService squareOAuthService, FrontendUtil frontendUtil) {
+        this.squareOAuthService = squareOAuthService;
         this.frontendUtil = frontendUtil;
     }
 
@@ -35,7 +35,7 @@ public class SquareOAuthController {
 
     @GetMapping("/start")
     public ResponseEntity<?> startOAuthFlow() {
-        String redirectUrl = squareService.startSquareOAuthFlow();
+        String redirectUrl = squareOAuthService.startOAuthFlow();
         return buildRedirectResponse(redirectUrl);
     }
 
@@ -49,7 +49,7 @@ public class SquareOAuthController {
             return Mono.just(buildRedirectResponse(frontendUtil.getFailureUri()));
         }
 
-        return squareService.finishSquareOAuthFlow(code, stateId)
+        return squareOAuthService.finishOAuthFlow(code, stateId)
                 .onErrorResume(err -> {
                     log.error("Failed approval due to: " + err.getMessage());
                     return Mono.just(false);
@@ -65,7 +65,7 @@ public class SquareOAuthController {
 
     @GetMapping("/status")
     public ResponseEntity<?> checkAuthorizationStatus() {
-        boolean authorized = squareService.checkIfAuthorized();
+        boolean authorized = squareOAuthService.checkIfAuthorized();
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode root = mapper.createObjectNode();
         root.put("authorized", authorized);
@@ -74,7 +74,7 @@ public class SquareOAuthController {
 
     @GetMapping("/revoke")
     public Mono<ResponseEntity<?>> revokeAccessToSquare() {
-        return squareService.revokeAccessToken()
+        return squareOAuthService.revokeAccessToken()
                 .map(accessRevoked -> {
                     ObjectNode root = MAPPER.createObjectNode();
                     root.put("revoked", accessRevoked);
